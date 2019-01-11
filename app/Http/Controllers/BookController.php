@@ -8,37 +8,36 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-
 class BookController extends Controller
 {
 
-
     public function __construct()
     {
-        //$this->middleware('auth');
-    }
 
+    }
 
     public function showAllBooks()
     {
+        try {
 
-        return response()->json(Book::all());
-
+            return response()->json(Book::all());
+        }
+        catch (\Exception $e)
+        {
+            return array('success' => false, 'message' => "Records not found");
+        }
     }
 
     public function showOnebook($id)
     {
-        try{
+        try {
 
             return response()->json(Book::findOrFail($id));
-        }
-        catch (\Exception $ex)
+
+        } catch (\Exception $ex)
         {
-            $ex.abort(404);
-
-
+            return array('success' => false, 'message' => "Book not found");
         }
-
     }
 
     public function create(Request $request)
@@ -50,12 +49,11 @@ class BookController extends Controller
         try {
             $book = Book::create($request->all());
 
-            return response()->json($book);
-        }catch (\Exception $ex)
-        {
-            $ex.abort(404);
-        }
+            return array('success' => true, 'message' => "saved", 'data' => $book);
 
+        } catch (\Exception $ex) {
+            return array('success' => false, 'message' => "Not saved");
+        }
     }
 
     public function update($id, Request $request)
@@ -64,27 +62,21 @@ class BookController extends Controller
             $book = Book::find($id);
             $book->update($request->all());
 
-            return response()->json($book, 200);
-        }
-        catch (\Exception $e)
-        {
-            $e.abort(404);
+            return array('success' => true, 'message' => "Updated successfully", 'data' => $book);
+        } catch (\Exception $e) {
+            return array('success' => false, 'message' => "not Updated");
         }
     }
 
     public function delete($id)
     {
         try {
-
-
             Book::findOrFail($id)->delete();
             return response('Deleted Successfully', 200);
-        }
-        catch (\Exception $ex){
-            $ex.abort(404);
+
+        } catch (\Exception $ex)
+        {
+            return array('success' => false, 'message' => "Error");
         }
     }
-
-
-
 }

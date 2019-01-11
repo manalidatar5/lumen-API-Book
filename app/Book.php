@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -11,9 +12,9 @@ class Book extends Model
      *
      * @var array
      */
-    protected $table="books";
+    protected $table = "books";
     protected $fillable = [
-        'bookname' ,'user_id'
+        'bookname', 'user_id'
     ];
 
     /**

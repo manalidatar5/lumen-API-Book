@@ -19,9 +19,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('register','UserController@register');
 
-    $router->get('getbooks/{user_id}','UserController@getbooks');
+    $router->get('getbooks/{user_id}', ['middleware' => 'auth'],'UserController@getbooks');
 
-    $router->get('books', ['middleware' => 'auth','uses' => 'BookController@showAllBooks']);
+    $router->get('books', 'BookController@showAllBooks');
 
     $router->get('books/{id}', ['uses' => 'BookController@showOneBook']);
 
